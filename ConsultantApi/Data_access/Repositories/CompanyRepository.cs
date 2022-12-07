@@ -1,4 +1,5 @@
-﻿using ConsultantApi.Entities;
+﻿using ConsultantApi.Data_access.Models;
+using ConsultantApi.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,8 @@ namespace ConsultantApi.Data_access.Repositories
 {
     public class CompanyRepository : ICompanyRepository
     {
+        private ClientMysql clientDb = new ClientMysql();
+
         public ICompanyData Create(ICompanyData company)
         {
             try
@@ -20,15 +23,30 @@ namespace ConsultantApi.Data_access.Repositories
             }
         }
 
-        public ICompanyData[] GetAll()
+        public List<ICompanyData> GetAll()
         {
             try
             {
-                return null;
+                List<ICompanyData> data = new List<ICompanyData>();
+
+                clientDb.Run().Open();
+
+                var query = clientDb.Run().CreateCommand();
+                query.CommandText = "SELECT * FROM companies LIMIT 100";
+
+                var result = query.ExecuteReader();
+                
+                while (result.Read())
+                {
+                    var company = new CompanyModel(result.GetGuid("uuid"), result.GetString("sector"), result.GetString("address"), result.GetString("start_date_partner"));
+                    data.Add(company);
+                }
+
+                return data;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
 
