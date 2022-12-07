@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ConsultantApi.Data_access.Repositories;
+using ConsultantApi.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,29 +11,31 @@ namespace ConsultantApi.Controllers
 {
     public class CompanyController : ApiController
     {
-        // GET api/<controller>
-        public IEnumerable<string> Get()
+        // GET: api/Company
+        public List<ICompanyData> Get()
         {
-            return new string[] { "value1", "value2" };
+            CompanyRepository companyRepository = new CompanyRepository();
+
+            return companyRepository.GetAll();
         }
 
-        // GET api/<controller>/5
+        // GET: api/Company/5
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<controller>
-        public void Post([FromBody] string value)
+        // POST: api/Company
+        public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody] string value)
+        // PUT: api/Company/5
+        public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/<controller>/5
+        // DELETE: api/Company/5
         public void Delete(int id)
         {
         }
