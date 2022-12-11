@@ -1,43 +1,48 @@
-﻿using ConsultantApi.Data_access.Repositories;
+﻿using ConsultantApi.Actions;
+using ConsultantApi.Data_access.Models;
 using ConsultantApi.Entities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 
 namespace ConsultantApi.Controllers
 {
     public class CompanyController : ApiController
     {
+        readonly CompanyAction companyAction = new CompanyAction();
         // GET: api/Company
-        public List<ICompanyData> Get()
+        public List<CompanyModel> Get()
         {
-            CompanyRepository companyRepository = new CompanyRepository();
-
-            return companyRepository.GetAll();
+            List<CompanyModel> companies = companyAction.GetAll();
+            return companies;
         }
 
         // GET: api/Company/5
-        public string Get(int id)
+        public CompanyModel Get([FromUri] Guid uuid)
         {
-            return "value";
+            CompanyModel company = companyAction.GetByUuid(uuid);
+            return company;
         }
 
         // POST: api/Company
-        public void Post([FromBody]string value)
+        public CompanyModel Post([FromBody] CompanyModel company)
         {
+            CompanyModel newCompany = companyAction.Create(company);
+            return newCompany;
         }
 
         // PUT: api/Company/5
-        public void Put(int id, [FromBody]string value)
+        public CompanyModel Put([FromUri] Guid uuid, [FromBody] CompanyModel company)
         {
+            CompanyModel companyUpdated = companyAction.Update(uuid, company);
+            return companyUpdated;
         }
 
         // DELETE: api/Company/5
-        public void Delete(int id)
+        public Boolean Delete([FromUri] Guid uuid)
         {
+            Boolean companyDeleted = companyAction.Delete(uuid);
+            return companyDeleted;
         }
     }
 }
