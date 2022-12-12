@@ -1,12 +1,8 @@
 ﻿using ConsultantApi.Data_access.Models;
 using ConsultantApi.Data_access.Repositories;
-using ConsultantApi.Entities;
-using Microsoft.Ajax.Utilities;
 using MySql.Data.MySqlClient;
-using MySqlX.XDevAPI.Common;
 using System;
 using System.Collections.Generic;
-using System.Web.WebPages;
 
 namespace ConsultantApi.Actions
 {
@@ -27,19 +23,17 @@ namespace ConsultantApi.Actions
                 while (result.Read())
                 {
                     CompanyModel company = new CompanyModel(
+                        result.GetInt64("id"),
                         result.GetGuid("uuid"),
+                        result.GetString("name"),
                         result.GetString("sector"),
                         result.GetString("address"),
                         result.GetString("start_date_partner"),
-                        result.GetMySqlDateTime("created_at").ToString(),
-                        result.GetMySqlDateTime("updated_at").ToString(),
-                        result.GetMySqlDateTime("deleted_at").ToString().IsNullOrWhiteSpace() ? "" : result.GetMySqlDateTime("deleted_at").ToString()
+                        (DateTime)result.GetMySqlDateTime("created_at"),
+                        (DateTime)result.GetMySqlDateTime("updated_at")
                    );
 
-                    if (company.Deleted_at == "")
-                    {
-                        companies.Add(company);
-                    }
+                    companies.Add(company);
                 }
                 result.Close();
 
@@ -62,15 +56,15 @@ namespace ConsultantApi.Actions
                 {
                     company = new CompanyModel(
                         result.GetGuid("uuid"),
+                        result.GetString("name"),
                         result.GetString("sector"),
                         result.GetString("address"),
                         result.GetString("start_date_partner"),
-                        result.GetMySqlDateTime("created_at").ToString(),
-                        result.GetMySqlDateTime("updated_at").ToString(),
-                        result.GetMySqlDateTime("deleted_at").ToString()
+                        (DateTime)result.GetMySqlDateTime("created_at"),
+                        (DateTime)result.GetMySqlDateTime("updated_at")
                    );
                 }
-                
+                Console.WriteLine(company);
                 result.Close();
                 return company;
             }
@@ -83,15 +77,21 @@ namespace ConsultantApi.Actions
         {
             try
             {
-                company.Uuid = new Guid();
-                company.Created_at = new DateTime().ToString();
-                company.Updated_at = new DateTime().ToString();
+                CompanyModel newCompany = new CompanyModel(
+                    Guid.NewGuid(),
+                    company.Sector,
+                    company.Name,
+                    company.Address,
+                    company.StartDatePartner,
+                    DateTime.UtcNow,
+                    DateTime.UtcNow
+                    );
+                
+                companyRepository.Create(newCompany);
 
-                companyRepository.Create(company);
+                CompanyModel companyAdded = GetByUuid(company.Uuid);
 
-                CompanyModel newCompany = GetByUuid(company.Uuid);
-
-                return newCompany;
+                return companyAdded;
             }
             catch (Exception e)
             {
@@ -102,12 +102,27 @@ namespace ConsultantApi.Actions
         {
             try
             {
-                string companyUuid = uuid.ToString();
-                company.Updated_at = new DateTime().ToString();
-                companyRepository.Update(companyUuid, company);
+                CompanyModel companyInDb = GetByUuid(uuid);
+                CompanyModel companyUpdate = new CompanyModel();
 
-                CompanyModel companyUpdated = GetByUuid(uuid);
-                return companyUpdated;
+                if (companyInDb != null)
+                {
+                    companyUpdate = new CompanyModel(
+                    companyInDb.Uuid,
+                    company.Sector == null ? companyInDb.Sector : company.Sector,
+                    company.Name == null ? companyInDb.Name : company.Name,
+                    company.Address == null ? companyInDb.Address : company.Address,
+                    company.StartDatePartner == null ? companyInDb.StartDatePartner : company.StartDatePartner,
+                    companyInDb.Created_at,
+                    DateTime.UtcNow
+                    );
+                }
+
+                string companyUuid = uuid.ToString();
+                companyRepository.Update(companyUuid, companyUpdate);
+
+                
+                return companyUpdate;
             }
             catch (Exception e)
             {
@@ -119,13 +134,13 @@ namespace ConsultantApi.Actions
             try
             {
                 string companyUuid = uuid.ToString();
-                string companyDeleted = new DateTime().ToString();
+                DateTime companyDeleted = DateTime.UtcNow;
                 Boolean isDeleted = false;
                 companyRepository.Delete(companyUuid, companyDeleted);
 
                 CompanyModel result = GetByUuid(uuid);
 
-                if (result.Deleted_at != null)
+                if (result != null)
                 {
                     isDeleted = true;
                 }
