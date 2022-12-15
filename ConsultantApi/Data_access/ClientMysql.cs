@@ -1,7 +1,4 @@
 ﻿using MySql.Data.MySqlClient;
-using dotenv.net;
-using System;
-using ConsultantApi.Properties;
 
 namespace ConsultantApi.Data_access
 {

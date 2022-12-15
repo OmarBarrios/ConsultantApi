@@ -1,8 +1,8 @@
 ﻿using ConsultantApi.Data_access.Models;
 using ConsultantApi.Data_access.Repositories;
-using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsultantApi.Actions
 {
@@ -13,29 +13,11 @@ namespace ConsultantApi.Actions
         {
             this.companyRepository = new CompanyRepository();
         }
-        public List<CompanyModel> GetAll()
+        public async Task<List<CompanyEntity>>  GetAll()
         {
             try
             {
-                List<CompanyModel> companies = new List<CompanyModel>();
-                MySqlDataReader result = companyRepository.GetAll();
-
-                while (result.Read())
-                {
-                    CompanyModel company = new CompanyModel(
-                        result.GetInt64("id"),
-                        result.GetGuid("uuid"),
-                        result.GetString("name"),
-                        result.GetString("sector"),
-                        result.GetString("address"),
-                        result.GetString("start_date_partner"),
-                        (DateTime)result.GetMySqlDateTime("created_at"),
-                        (DateTime)result.GetMySqlDateTime("updated_at")
-                   );
-
-                    companies.Add(company);
-                }
-                result.Close();
+                List<CompanyEntity> companies = await companyRepository.GetAll();
 
                 return companies;
             }
@@ -44,28 +26,13 @@ namespace ConsultantApi.Actions
                 throw new Exception(e.Message);
             }
         }
-        public CompanyModel GetByUuid(Guid uuid)
+        public async Task<CompanyEntity> GetByUuid(Guid uuid)
         {
             try
             {
                 string companyUuid = uuid.ToString();
-                MySqlDataReader result = companyRepository.GetByUuid(companyUuid);
-                CompanyModel company = null;
+                CompanyEntity company = await companyRepository.GetByUuid(companyUuid);
 
-                while (result.Read())
-                {
-                    company = new CompanyModel(
-                        result.GetGuid("uuid"),
-                        result.GetString("name"),
-                        result.GetString("sector"),
-                        result.GetString("address"),
-                        result.GetString("start_date_partner"),
-                        (DateTime)result.GetMySqlDateTime("created_at"),
-                        (DateTime)result.GetMySqlDateTime("updated_at")
-                   );
-                }
-                Console.WriteLine(company);
-                result.Close();
                 return company;
             }
             catch (Exception e)
@@ -73,11 +40,11 @@ namespace ConsultantApi.Actions
                 throw new Exception(e.Message);
             }
         }
-        public CompanyModel Create(CompanyModel company) 
+        public async Task<CompanyEntity> Create(CompanyEntity company) 
         {
             try
             {
-                CompanyModel newCompany = new CompanyModel(
+                CompanyEntity newCompany = new CompanyEntity(
                     Guid.NewGuid(),
                     company.Sector,
                     company.Name,
@@ -87,40 +54,37 @@ namespace ConsultantApi.Actions
                     DateTime.UtcNow
                     );
                 
-                companyRepository.Create(newCompany);
+                await companyRepository.Create(newCompany);
 
-                CompanyModel companyAdded = GetByUuid(company.Uuid);
-
-                return companyAdded;
+                return newCompany;
             }
             catch (Exception e)
             {
                 throw new Exception(e.Message);
             }
         }
-        public CompanyModel Update(Guid uuid, CompanyModel company)
+        public async Task<CompanyEntity> Update(Guid uuid, CompanyEntity company)
         {
             try
             {
-                CompanyModel companyInDb = GetByUuid(uuid);
-                CompanyModel companyUpdate = new CompanyModel();
+                CompanyEntity companyInDb = await GetByUuid(uuid);
+                CompanyEntity companyUpdate = new CompanyEntity();
 
                 if (companyInDb != null)
                 {
-                    companyUpdate = new CompanyModel(
-                    companyInDb.Uuid,
-                    company.Sector == null ? companyInDb.Sector : company.Sector,
-                    company.Name == null ? companyInDb.Name : company.Name,
-                    company.Address == null ? companyInDb.Address : company.Address,
-                    company.StartDatePartner == null ? companyInDb.StartDatePartner : company.StartDatePartner,
-                    companyInDb.Created_at,
-                    DateTime.UtcNow
+                    companyUpdate = new CompanyEntity(
+                        companyInDb.Uuid,
+                        company.Sector ?? companyInDb.Sector,
+                        company.Name ?? companyInDb.Name,
+                        company.Address ?? companyInDb.Address,
+                        company.StartDatePartner ?? companyInDb.StartDatePartner,
+                        companyInDb.Created_at,
+                        DateTime.UtcNow
                     );
                 }
 
                 string companyUuid = uuid.ToString();
-                companyRepository.Update(companyUuid, companyUpdate);
-
+                await companyRepository.Update(companyUuid, companyUpdate);
                 
                 return companyUpdate;
             }
@@ -129,16 +93,16 @@ namespace ConsultantApi.Actions
                 throw new Exception(e.Message);
             }
         }
-        public Boolean Delete(Guid uuid)
+        public async Task<Boolean> Delete(Guid uuid)
         {
             try
             {
                 string companyUuid = uuid.ToString();
                 DateTime companyDeleted = DateTime.UtcNow;
                 Boolean isDeleted = false;
-                companyRepository.Delete(companyUuid, companyDeleted);
+                await companyRepository.Delete(companyUuid, companyDeleted);
 
-                CompanyModel result = GetByUuid(uuid);
+                CompanyEntity result = await GetByUuid(uuid);
 
                 if (result != null)
                 {

@@ -1,8 +1,8 @@
 ﻿using ConsultantApi.Actions;
 using ConsultantApi.Data_access.Models;
-using ConsultantApi.Entities;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace ConsultantApi.Controllers
@@ -11,37 +11,33 @@ namespace ConsultantApi.Controllers
     {
         readonly CompanyAction companyAction = new CompanyAction();
         // GET: api/Company
-        public List<CompanyModel> Get()
+        public async Task<List<CompanyEntity>>  Get()
         {
-            List<CompanyModel> companies = companyAction.GetAll();
+            List<CompanyEntity> companies = await companyAction.GetAll();
             return companies;
         }
-
         // GET: api/Company/5
-        public CompanyModel Get([FromUri] Guid uuid)
+        public async Task<CompanyEntity> Get([FromUri] Guid uuid)
         {
-            CompanyModel company = companyAction.GetByUuid(uuid);
+            CompanyEntity company = await companyAction.GetByUuid(uuid);
             return company;
         }
-
         // POST: api/Company
-        public CompanyModel Post([FromBody] CompanyModel company)
+        public async Task<CompanyEntity> Post([FromBody] CompanyEntity company)
         {
-            CompanyModel newCompany = companyAction.Create(company);
+            CompanyEntity newCompany = await companyAction.Create(company);
             return newCompany;
         }
-
         // PUT: api/Company/5
-        public CompanyModel Put([FromUri] Guid uuid, [FromBody] CompanyModel company)
+        public async Task<CompanyEntity> Put([FromUri] Guid uuid, [FromBody] CompanyEntity company)
         {
-            CompanyModel companyUpdated = companyAction.Update(uuid, company);
+            CompanyEntity companyUpdated = await companyAction.Update(uuid, company);
             return companyUpdated;
         }
-
         // DELETE: api/Company/5
-        public Boolean Delete([FromUri] Guid uuid)
+        public async Task<Boolean> Delete([FromUri] Guid uuid)
         {
-            Boolean companyDeleted = companyAction.Delete(uuid);
+            Boolean companyDeleted = await companyAction.Delete(uuid);
             return companyDeleted;
         }
     }

@@ -1,11 +1,11 @@
-﻿using ConsultantApi.Entities;
+﻿using ConsultantApi.Data_access.Models;
 using System;
 
 namespace ConsultantApi.Data_access.Repositories
 {
-    public class ProjectRepository : IProjectRepository
+    public class ProjectRepository
     {
-        public IProjectData Create(IProjectData project)
+        public ProjectEntity Create(ProjectEntity project)
         {
             try
             {
@@ -16,7 +16,6 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception();
             }
         }
-
         public Boolean Delete(Guid uuid)
         {
             try
@@ -28,8 +27,7 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception();
             }
         }
-
-        public IProjectData[] GetAll()
+        public ProjectEntity[] GetAll()
         {
             try
             {
@@ -40,8 +38,7 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception();
             }
         }
-
-        public IProjectData GetByUuid(Guid uuid)
+        public ProjectEntity GetByUuid(Guid uuid)
         {
             try
             {
@@ -52,8 +49,7 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception();
             }
         }
-
-        public IProjectData Update(Guid uuid, IProjectData project)
+        public ProjectEntity Update(Guid uuid, ProjectEntity project)
         {
             try
             {

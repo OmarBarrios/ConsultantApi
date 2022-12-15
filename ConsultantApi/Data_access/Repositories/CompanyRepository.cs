@@ -1,13 +1,15 @@
 ﻿using ConsultantApi.Data_access.Models;
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsultantApi.Data_access.Repositories
 {
-    public class CompanyRepository
+    public class CompanyRepository : ICompanyRepository
     {
         ClientMysql clientDb = new ClientMysql();
-        public MySqlDataReader GetAll()
+        public async Task<List<CompanyEntity>> GetAll()
         {
             try
             {
@@ -16,17 +18,17 @@ namespace ConsultantApi.Data_access.Repositories
 
                 var query = clientDb.Run().CreateCommand();
                 query.CommandText = "SELECT * FROM companies WHERE (deleted_at is null)";
+                var result = await query.ExecuteReaderAsync();
 
-                var result = query.ExecuteReader();
-
-                return result;
+                List<CompanyEntity> companies = GenerateListOfCompanies((MySqlDataReader)result);
+                return companies;
             }
             catch(MySqlException e)
             {
                 throw new Exception(e.Message);
             }
         }
-        public MySqlDataReader GetByUuid(string uuid)
+        public async Task<CompanyEntity> GetByUuid(string uuid)
         {
             try
             {
@@ -38,16 +40,17 @@ namespace ConsultantApi.Data_access.Repositories
                 cmd.Parameters.AddWithValue("@uuid", uuid);
                 cmd.Prepare();
 
-                var result = cmd.ExecuteReader();
+                var result = await cmd.ExecuteReaderAsync();
+                CompanyEntity company = GenerateACompany((MySqlDataReader)result);
 
-                return result;
+                return company;
             }
             catch(MySqlException e)
             {
                 throw new Exception(e.Message);
             }
         }
-        public CompanyModel Create(CompanyModel company)
+        public async Task<CompanyEntity> Create(CompanyEntity company)
         {
             try
             {
@@ -78,7 +81,7 @@ namespace ConsultantApi.Data_access.Repositories
                 cmd.Parameters.AddWithValue("@created_at", company.Created_at);
                 cmd.Parameters.AddWithValue("@updated_at", company.Updated_at);
                 cmd.Prepare();
-                cmd.ExecuteReader();
+                await cmd.ExecuteReaderAsync();
 
                 clientDb.Run().Close();
                 return company;
@@ -88,7 +91,7 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception(e.Message);
             }
         }
-        public CompanyModel Update(string uuid, CompanyModel company)
+        public async Task<CompanyEntity> Update(string uuid, CompanyEntity company)
         {
             try
             {
@@ -111,7 +114,7 @@ namespace ConsultantApi.Data_access.Repositories
                 cmd.Parameters.AddWithValue("@start_date_partner", company.StartDatePartner);
                 cmd.Parameters.AddWithValue("@updated_at", company.Updated_at);
                 cmd.Prepare();
-                cmd.ExecuteReader();
+                await cmd.ExecuteReaderAsync();
 
                 clientDb.Run().Close();
                 return company;
@@ -121,7 +124,7 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception(e.Message);
             }
         }
-        public MySqlDataReader Delete(string uuid, DateTime companyDeleted)
+        public async Task<Boolean> Delete(string uuid, DateTime companyDeleted)
         {
             try
             {
@@ -136,11 +139,89 @@ namespace ConsultantApi.Data_access.Repositories
                 cmd.Parameters.AddWithValue("@deleted_at", companyDeleted);
                 cmd.Prepare();
 
-                var result = cmd.ExecuteReader();
+                var result = await cmd.ExecuteReaderAsync();
                 clientDb.Run().Close();
-                return result;
+
+                Boolean companyIsDeleted = await IsDeleted(uuid);
+                return companyIsDeleted;
             }
             catch(MySqlException e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+
+        private List<CompanyEntity> GenerateListOfCompanies(MySqlDataReader result)
+        {
+            try
+            {
+                List<CompanyEntity> companies = new List<CompanyEntity>();
+
+                while (result.Read())
+                {
+                    CompanyEntity company = new CompanyEntity(
+                        result.GetGuid("uuid"),
+                        result.GetString("name"),
+                        result.GetString("sector"),
+                        result.GetString("address"),
+                        result.GetString("start_date_partner"),
+                        (DateTime)result.GetMySqlDateTime("created_at"),
+                        (DateTime)result.GetMySqlDateTime("updated_at")
+                   );
+
+                    companies.Add(company);
+                }
+                result.Close();
+
+                return companies;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        private CompanyEntity GenerateACompany(MySqlDataReader result)
+        {
+            try
+            {
+                CompanyEntity company = new CompanyEntity();
+
+                while (result.Read())
+                {
+                    company = new CompanyEntity(
+                        result.GetGuid("uuid"),
+                        result.GetString("name"),
+                        result.GetString("sector"),
+                        result.GetString("address"),
+                        result.GetString("start_date_partner"),
+                        (DateTime)result.GetMySqlDateTime("created_at"),
+                        (DateTime)result.GetMySqlDateTime("updated_at")
+                   );
+                }
+
+                result.Close();
+                return company;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+        }
+        private async Task<Boolean> IsDeleted(string uuid)
+        {
+            try
+            {
+                Boolean isDeleted = false;
+                CompanyEntity result = await GetByUuid(uuid);
+
+                if (result != null)
+                {
+                    isDeleted = true;
+                }
+
+                return isDeleted;
+            }
+            catch (Exception e)
             {
                 throw new Exception(e.Message);
             }

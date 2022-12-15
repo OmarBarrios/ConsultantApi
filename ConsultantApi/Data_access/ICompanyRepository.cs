@@ -1,16 +1,17 @@
-﻿using ConsultantApi.Entities;
+﻿using ConsultantApi.Data_access.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsultantApi.Data_access
 {
     public interface ICompanyRepository
     {
-        ICompanyData Create(ICompanyData company);
-        List<ICompanyData> GetAll();
-        ICompanyData GetByUuid(Guid uuid);
-        ICompanyData Update(Guid uuid, ICompanyData company);
-        Boolean Delete(Guid uuid);
+        Task<List<CompanyEntity>> GetAll();
+        Task<CompanyEntity> GetByUuid(string uuid);
+        Task<CompanyEntity> Create(CompanyEntity company);
+        Task<CompanyEntity> Update(string uuid, CompanyEntity company);
+        Task<Boolean> Delete(string uuid, DateTime companyDeleted);
 
     }
 }
