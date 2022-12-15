@@ -1,5 +1,5 @@
-﻿using ConsultantApi.Data_access.Repositories;
-using ConsultantApi.Entities;
+﻿using ConsultantApi.Data_access.Models;
+using ConsultantApi.Data_access.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,7 @@ namespace ConsultantApi.Actions
             this.projectRepository = new ProjectRepository();
         }
 
-        public IProjectData Create(IProjectData project)
+        public ProjectEntity Create(ProjectEntity project)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace ConsultantApi.Actions
                 throw new Exception();
             }
         }
-        public IProjectData[] GetAll()
+        public ProjectEntity[] GetAll()
         {
             try
             {
@@ -37,7 +37,7 @@ namespace ConsultantApi.Actions
                 throw new Exception();
             }
         }
-        public IProjectData GetByUuid(Guid uuid)
+        public ProjectEntity GetByUuid(Guid uuid)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace ConsultantApi.Actions
                 throw new Exception();
             }
         }
-        public IProjectData Update(Guid uuid, IProjectData project)
+        public ProjectEntity Update(Guid uuid, ProjectEntity project)
         {
             try
             {

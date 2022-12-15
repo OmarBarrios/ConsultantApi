@@ -26,6 +26,15 @@ namespace ConsultantApi.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string MYSQL_PASSWORD {
+            get {
+                return ((string)(this["MYSQL_PASSWORD"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("127.0.0.1")]
         public string MYSQL_HOST {
             get {
                 return ((string)(this["MYSQL_HOST"]));
@@ -34,7 +43,7 @@ namespace ConsultantApi.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("consultant")]
         public string MYSQL_DATABASE {
             get {
                 return ((string)(this["MYSQL_DATABASE"]));
@@ -43,19 +52,10 @@ namespace ConsultantApi.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("root")]
         public string MYSQL_USER {
             get {
                 return ((string)(this["MYSQL_USER"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string MYSQL_PASSWORD {
-            get {
-                return ((string)(this["MYSQL_PASSWORD"]));
             }
         }
     }

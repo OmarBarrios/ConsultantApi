@@ -1,70 +1,122 @@
-﻿using ConsultantApi.Data_access.Repositories;
-using ConsultantApi.Entities;
+﻿using ConsultantApi.Data_access.Models;
+using ConsultantApi.Data_access.Repositories;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsultantApi.Actions
 {
     public class EmployeeAction
     {
-        private EmployeeRepository employeeRepository;
-        EmployeeAction()
+        private readonly EmployeeRepository employeeRepository;
+        public EmployeeAction()
         {
             this.employeeRepository = new EmployeeRepository();
         }
 
-        public IEmployeeData Create(IEmployeeData employee)
+        public async Task<List<EmployeeEntity>> GetAll()
         {
             try
             {
-                return null;
+                List<EmployeeEntity> employees = await employeeRepository.GetAll();
+                return employees;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public IEmployeeData[] GetAll()
+        public async Task<EmployeeEntity> GetByUuid(Guid uuid)
         {
             try
             {
-                return null;
+                string employeeUuid = uuid.ToString();
+                EmployeeEntity employee = await employeeRepository.GetByUuid(employeeUuid);
+                return employee;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public IEmployeeData GetByUuid(Guid uuid)
+        public async Task<EmployeeEntity> Create(EmployeeEntity employee)
         {
             try
             {
-                return null;
+                EmployeeEntity newEmployee = new EmployeeEntity(
+                    Guid.NewGuid(),
+                    employee.Name,
+                    DateTime.UtcNow,
+                    employee.Nationality,
+                    employee.ChapterArea,
+                    employee.Email,
+                    employee.CompanyAssigned,
+                    DateTime.UtcNow,
+                    DateTime.UtcNow
+                    );
+
+                await employeeRepository.Create(newEmployee);
+                
+                return newEmployee;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public IEmployeeData Update(Guid uuid, IEmployeeData employe)
+        public async Task<EmployeeEntity> Update(Guid uuid, EmployeeEntity employee)
         {
             try
             {
-                return null;
+                EmployeeEntity employeeInDb = await GetByUuid(uuid);
+                EmployeeEntity employeeUpdate = new EmployeeEntity();
+
+                if (employeeInDb != null) 
+                {
+                    employeeUpdate = new EmployeeEntity(
+                        employeeInDb.Uuid,
+                        employee.Name ?? employeeInDb.Name,
+                        employee.Birthday == null ? employeeInDb.Birthday : employee.Birthday,
+                        employee.Nationality ?? employeeInDb.Nationality,
+                        employee.ChapterArea ?? employeeInDb.ChapterArea,
+                        employee.Email ?? employeeInDb.Email,
+                        employee.CompanyAssigned == null ? employeeInDb.CompanyAssigned : employee.CompanyAssigned,
+                        employeeInDb.Created_at,
+                        DateTime.UtcNow
+                    );                
+                }
+
+                string employeeUuid = uuid.ToString();
+                await employeeRepository.Update(employeeUuid, employeeUpdate);
+                
+                return employeeUpdate;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public Boolean Delete(Guid uuid)
+        public async Task<bool> Delete(Guid uuid)
         {
             try
             {
-                return false;
+                string employeeUuid = uuid.ToString();
+                DateTime employeeDelete = DateTime.UtcNow;
+                Boolean isDeleted = false;
+                await employeeRepository.Delete(employeeUuid, employeeDelete);
+
+                EmployeeEntity result = await GetByUuid(uuid);
+
+                if (result != null) 
+                {
+                    isDeleted = true;
+                }
+
+                return isDeleted;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
     }

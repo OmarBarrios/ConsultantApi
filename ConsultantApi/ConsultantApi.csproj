@@ -302,21 +302,19 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Data_access\ClientMysql.cs" />
     <Compile Include="Data_access\ICompanyRepository.cs" />
     <Compile Include="Data_access\IEmployeeRepository.cs" />
     <Compile Include="Data_access\IProjectRepository.cs" />
-    <Compile Include="Data_access\Models\CompanyModel.cs" />
-    <Compile Include="Data_access\Models\EmployeeModel.cs" />
-    <Compile Include="Data_access\Models\ProjectModel.cs" />
+    <Compile Include="Entities\CompanyEntity.cs" />
+    <Compile Include="Entities\EmployeeEntity.cs" />
+    <Compile Include="Entities\ProjectEntity.cs" />
     <Compile Include="Data_access\Repositories\CompanyRepository.cs" />
     <Compile Include="Data_access\Repositories\EmployeeRepository.cs" />
     <Compile Include="Data_access\Repositories\ProjectRepository.cs" />
-    <Compile Include="Entities\ICompanyData.cs" />
-    <Compile Include="Entities\IEmployeeData.cs" />
-    <Compile Include="Entities\IProjectData.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -401,8 +399,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Data\" />
-    <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />

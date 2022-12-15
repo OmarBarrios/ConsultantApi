@@ -1,14 +1,16 @@
-﻿using ConsultantApi.Entities;
+﻿using ConsultantApi.Data_access.Models;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ConsultantApi.Data_access
 {
     public interface IEmployeeRepository
     {
-        IEmployeeData Create(IEmployeeData employee);
-        IEmployeeData[] GetAll();
-        IEmployeeData GetByUuid(Guid uuid);
-        IEmployeeData Update(Guid uuid, IEmployeeData employee);
-        Boolean Delete(Guid uuid);
+        Task<List<EmployeeEntity>> GetAll();
+        Task<EmployeeEntity> GetByUuid(string uuid);
+        Task<EmployeeEntity> Create(EmployeeEntity employee);
+        Task<EmployeeEntity> Update(string uuid, EmployeeEntity employee);
+        Task<Boolean> Delete(string uuid, DateTime employeeDeleted);
     }
 }
