@@ -96,21 +96,13 @@ namespace ConsultantApi.Actions
                 throw new Exception(e.Message);
             }
         }
-        public async Task<bool> Delete(Guid uuid)
+        public async Task<Boolean> Delete(Guid uuid)
         {
             try
             {
                 string employeeUuid = uuid.ToString();
                 DateTime employeeDelete = DateTime.UtcNow;
-                Boolean isDeleted = false;
-                await employeeRepository.Delete(employeeUuid, employeeDelete);
-
-                EmployeeEntity result = await GetByUuid(uuid);
-
-                if (result != null) 
-                {
-                    isDeleted = true;
-                }
+                Boolean isDeleted = await employeeRepository.Delete(employeeUuid, employeeDelete);
 
                 return isDeleted;
             }
