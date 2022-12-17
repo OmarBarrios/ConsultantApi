@@ -9,7 +9,6 @@ namespace ConsultantApi.Data_access.Repositories
     public class EmployeeRepository : IEmployeeRepository
     {
         ClientMysql clientDb = new ClientMysql();
-        
 
         public async Task<List<EmployeeEntity>> GetAll()
         {
@@ -136,7 +135,7 @@ namespace ConsultantApi.Data_access.Repositories
                 throw new Exception(e.Message);
             }
         }
-        public async Task<bool> Delete(string uuid, DateTime employeeDeleted)
+        public async Task<Boolean> Delete(string uuid, DateTime employeeDeleted)
         {
             try
             {

@@ -2,72 +2,105 @@
 using ConsultantApi.Data_access.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using System.Threading.Tasks;
 
 namespace ConsultantApi.Actions
 {
     public class ProjectAction
     {
         private ProjectRepository projectRepository;
-        ProjectAction()
+        public ProjectAction()
         {
             this.projectRepository = new ProjectRepository();
         }
 
-        public ProjectEntity Create(ProjectEntity project)
+        public async Task<List<ProjectEntity>> GetAll()
         {
             try
             {
-                return null;
+                List<ProjectEntity> projects = await projectRepository.GetAll();
+                return projects;
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public ProjectEntity[] GetAll()
+        public async Task<ProjectEntity> GetByUuid(Guid uuid)
         {
             try
             {
-                return null;
+                string projectUuid = uuid.ToString();
+                ProjectEntity project = await projectRepository.GetByUuid(projectUuid);
+                return project;
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public ProjectEntity GetByUuid(Guid uuid)
+        public async Task<ProjectEntity> Create(ProjectEntity project)
         {
             try
             {
-                return null;
+                ProjectEntity newProject = new ProjectEntity(
+                    Guid.NewGuid(),
+                    project.Name,
+                    project.CompanyAssigned,
+                    (DateTime)project.StartDate,
+                    DateTime.UtcNow,
+                    DateTime.UtcNow
+                    );
+                await projectRepository.Create(newProject);
+                return newProject;
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public ProjectEntity Update(Guid uuid, ProjectEntity project)
+        public async Task<ProjectEntity> Update(Guid uuid, ProjectEntity project)
         {
             try
             {
-                return null;
+                ProjectEntity projectInDb = await GetByUuid(uuid);
+                ProjectEntity projectUpdate = new ProjectEntity();
+
+                if (projectInDb != null)
+                {
+                    projectUpdate = new ProjectEntity(
+                        projectInDb.Uuid,
+                        project.Name ?? projectInDb.Name,
+                        project.CompanyAssigned == null ? projectInDb.CompanyAssigned : project.CompanyAssigned,
+                        project.StartDate == null ? projectInDb.StartDate : project.StartDate,
+                        projectInDb.Created_at,
+                        DateTime.UtcNow
+                    );
+                }
+
+                string projectUuid = uuid.ToString();
+                await projectRepository.Update(projectUuid, projectUpdate);
+
+                return projectUpdate;
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
-        public Boolean Delete(Guid uuid)
+        public async Task<Boolean> Delete(Guid uuid)
         {
             try
             {
-                return false;
+                string projectUuid = uuid.ToString();
+                DateTime projectDelete = DateTime.UtcNow;
+                
+                Boolean isDeleted = await projectRepository.Delete(projectUuid, projectDelete);
+                return isDeleted;
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception();
+                throw new Exception(e.Message);
             }
         }
     }
