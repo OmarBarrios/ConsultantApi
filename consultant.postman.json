@@ -1,0 +1,394 @@
+{
+	"info": {
+		"_postman_id": "885a5208-14f9-44a0-a834-7e9d9fdd8606",
+		"name": "consultant",
+		"description": "Api REST desarrollada en tecnología .NET Framework. que utiliza una base de datos Mysql.\n\nEndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10665014"
+	},
+	"item": [
+		{
+			"name": "companies",
+			"item": [
+				{
+					"name": "get all companies",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/company",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a company",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/company?uuid=7dd3662d-8451-450c-a9b8-68897aca1561",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "7dd3662d-8451-450c-a9b8-68897aca1561"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete company",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/company?uuid=7dd3662d-8451-450c-a9b8-68897aca1561",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "7dd3662d-8451-450c-a9b8-68897aca1561"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update company",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Name\": \"Funiber updated\", \r\n\"Sector\": \"Ingenieria updated\", \r\n\"Address\": \"Algo actualizado jeje\", \r\n\"StartDatePartner\": \"11/12/2022\" \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/company?uuid=7dd3662d-8451-450c-a9b8-68897aca1561",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "7dd3662d-8451-450c-a9b8-68897aca1561"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"Name\": \"CompanyTest2\", \r\n\"Sector\": \"Informatica2\", \r\n\"Address\": \"Calle Las Marias\", \r\n\"StartDatePartner\": \"12/12/2022\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/company",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"company"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "employees",
+			"item": [
+				{
+					"name": "get all employees",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/employee",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create employee",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Peter\",\r\n    \"Birthday\": \"2001-07-10\",\r\n    \"Nationality\": \"Guatemalteco\",\r\n    \"ChapterArea\": \"Backend\",\r\n    \"Email\": \"peter.barrios@ct.uneatlantico.es\",\r\n    \"ProjectAssigned\": \"414c7534-763c-49e4-9bda-8746b892c199\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/employee",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employee"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a employee",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/employee/?uuid=4df41d43-bf28-434e-abff-3af4f7b8bd5e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employee",
+								""
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "4df41d43-bf28-434e-abff-3af4f7b8bd5e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update a employee",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"Actualizado\",\r\n    \"Birthday\": \"2001-07-10\",\r\n    \"Nationality\": \"Guatemalteco\",\r\n    \"ChapterArea\": \"Frontend\",\r\n    \"Email\": \"actualizado.barrios@ct.uneatlantico.es\",\r\n    \"ProjectAssigned\": \"414c7534-763c-49e4-9bda-8746b892c199\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/employee/?uuid=4df41d43-bf28-434e-abff-3af4f7b8bd5e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employee",
+								""
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "4df41d43-bf28-434e-abff-3af4f7b8bd5e"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a employee",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/employee/?uuid=4df41d43-bf28-434e-abff-3af4f7b8bd5e",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"employee",
+								""
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "4df41d43-bf28-434e-abff-3af4f7b8bd5e"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "projects",
+			"item": [
+				{
+					"name": "get all projects",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/project",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"project"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get a project",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/project/:uuid",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"project",
+								":uuid"
+							],
+							"variable": [
+								{
+									"key": "uuid",
+									"value": "414c7534-763c-49e4-9bda-8746b892c199"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete a project",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/project/?uuid=414c7534-763c-49e4-9bda-8746b892c199",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"project",
+								""
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "414c7534-763c-49e4-9bda-8746b892c199"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update project",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"SYN\",\r\n    \"CompanyAssigned\": \"7dd3662d-8451-450c-a9b8-68897aca1561\",\r\n    \"StartDate\": \"11/12/2022\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/project?uuid=414c7534-763c-49e4-9bda-8746b892c199",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"project"
+							],
+							"query": [
+								{
+									"key": "uuid",
+									"value": "414c7534-763c-49e4-9bda-8746b892c199"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create project",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"Name\": \"File-manager\",\r\n    \"CompanyAssigned\": \"7dd3662d-8451-450c-a9b8-68897aca1561\",\r\n    \"StartDate\": \"11/12/2022\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/project",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"project"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

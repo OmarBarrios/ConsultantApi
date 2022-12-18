@@ -63,7 +63,7 @@ namespace ConsultantApi.Data_access.Repositories
                                         nationality,
                                         chapter_area,
                                         email,
-                                        company_assigned,
+                                        project_assigned,
                                         created_at,
                                         updated_at)
                             VALUES(
@@ -73,7 +73,7 @@ namespace ConsultantApi.Data_access.Repositories
                                         @nationality,
                                         @chapter_area,
                                         @email,
-                                        @company_assigned,
+                                        @project_assigned,
                                         @created_at,
                                         @updated_at)";
                 var cmd = new MySqlCommand(sql, clientDb.Run());
@@ -84,7 +84,7 @@ namespace ConsultantApi.Data_access.Repositories
                 cmd.Parameters.AddWithValue("@nationality", employee.Nationality);
                 cmd.Parameters.AddWithValue("@chapter_area", employee.ChapterArea);
                 cmd.Parameters.AddWithValue("@email", employee.Email);
-                cmd.Parameters.AddWithValue("@company_assigned", employee.CompanyAssigned);
+                cmd.Parameters.AddWithValue("@project_assigned", employee.ProjectAssigned);
                 cmd.Parameters.AddWithValue("@created_at", employee.Created_at);
                 cmd.Parameters.AddWithValue("@updated_at", employee.Updated_at);
                 cmd.Prepare();
@@ -110,7 +110,7 @@ namespace ConsultantApi.Data_access.Repositories
                                 nationality= @nationality,
                                 chapter_area= @chapter_area,
                                 email= @email,
-                                company_assigned= @company_assigned,
+                                project_assigned= @project_assigned,
                                 updated_at= @updated_at
                             WHERE uuid = @uuid";
 
@@ -122,7 +122,7 @@ namespace ConsultantApi.Data_access.Repositories
                 cmd.Parameters.AddWithValue("@nationality", employee.Nationality);
                 cmd.Parameters.AddWithValue("@chapter_area", employee.ChapterArea);
                 cmd.Parameters.AddWithValue("@email", employee.Email);
-                cmd.Parameters.AddWithValue("@company_assigned", employee.CompanyAssigned);
+                cmd.Parameters.AddWithValue("@project_assigned", employee.ProjectAssigned);
                 cmd.Parameters.AddWithValue("@updated_at", employee.Updated_at);
                 cmd.Prepare();
                 await cmd.ExecuteReaderAsync();
@@ -177,7 +177,7 @@ namespace ConsultantApi.Data_access.Repositories
                         result.GetString("nationality"),
                         result.GetString("chapter_area"),
                         result.GetString("email"),
-                        result.GetGuid("company_assigned"),
+                        result.GetGuid("project_assigned"),
                         (DateTime)result.GetMySqlDateTime("created_at"),
                         (DateTime)result.GetMySqlDateTime("updated_at")
                    );
@@ -208,7 +208,7 @@ namespace ConsultantApi.Data_access.Repositories
                         result.GetString("nationality"),
                         result.GetString("chapter_area"),
                         result.GetString("email"),
-                        result.GetGuid("company_assigned"),
+                        result.GetGuid("project_assigned"),
                         (DateTime)result.GetMySqlDateTime("created_at"),
                         (DateTime)result.GetMySqlDateTime("updated_at")
                    );

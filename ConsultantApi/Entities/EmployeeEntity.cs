@@ -7,7 +7,7 @@ namespace ConsultantApi.Data_access.Models
         public EmployeeEntity()
         { }
 
-        public EmployeeEntity(Guid uuid, string name, DateTime birthday, string nationality, string chapterArea, string email, Guid companyAssigned, DateTime created_at, DateTime updated_at)
+        public EmployeeEntity(Guid uuid, string name, DateTime birthday, string nationality, string chapterArea, string email, Guid projectAssigned, DateTime created_at, DateTime updated_at)
         {
             this.Uuid = uuid;
             this.Name = name;
@@ -15,7 +15,7 @@ namespace ConsultantApi.Data_access.Models
             this.Nationality = nationality;
             this.ChapterArea = chapterArea;
             this.Email = email;
-            this.CompanyAssigned = companyAssigned;
+            this.ProjectAssigned = projectAssigned;
             this.Created_at = created_at;
             this.Updated_at = updated_at;
         }
@@ -26,7 +26,7 @@ namespace ConsultantApi.Data_access.Models
         public string Nationality { get; set; }
         public string ChapterArea { get; set; }
         public string Email { get; set; }
-        public Guid CompanyAssigned { get; set; }
+        public Guid ProjectAssigned { get; set; }
         public DateTime Created_at { get; set; }
         public DateTime Updated_at { get; set; }
     }
