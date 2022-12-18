@@ -50,7 +50,7 @@ namespace ConsultantApi.Actions
                     employee.Nationality,
                     employee.ChapterArea,
                     employee.Email,
-                    employee.CompanyAssigned,
+                    employee.ProjectAssigned,
                     DateTime.UtcNow,
                     DateTime.UtcNow
                     );
@@ -80,7 +80,7 @@ namespace ConsultantApi.Actions
                         employee.Nationality ?? employeeInDb.Nationality,
                         employee.ChapterArea ?? employeeInDb.ChapterArea,
                         employee.Email ?? employeeInDb.Email,
-                        employee.CompanyAssigned == null ? employeeInDb.CompanyAssigned : employee.CompanyAssigned,
+                        employee.ProjectAssigned == null ? employeeInDb.ProjectAssigned : employee.ProjectAssigned,
                         employeeInDb.Created_at,
                         DateTime.UtcNow
                     );                
